@@ -17,8 +17,12 @@ ENV MYSQL_DATABASE=universitybdd
 # Copia el archivo .sql al contenedor para que MySQL lo ejecute al iniciar
 COPY backups/*.sql /docker-entrypoint-initdb.d/
 
+# Crea el directorio /app y establece como directorio de trabajo
+RUN mkdir -p /app
+WORKDIR /app
+
 # Copia el archivo fake_http.py al contenedor
-COPY fake_http.py /tmp/fake_http.py
+COPY fake_http.py /app/fake_http.py
 
 # Expone el puerto de MySQL
 EXPOSE 3306
@@ -27,4 +31,4 @@ EXPOSE 3306
 EXPOSE 8080
 
 # Inicia MySQL y el servidor HTTP falso
-CMD sh -c "mysqld & python3 /tmp/fake_http.py"
+CMD sh -c "mysqld & python3 /app/fake_http.py"
