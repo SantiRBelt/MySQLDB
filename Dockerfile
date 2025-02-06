@@ -10,3 +10,4 @@ COPY backups/*.sql /docker-entrypoint-initdb.d/
 
 # Expone el puerto de MySQL
 EXPOSE 3306
+EXPOSE 8080
