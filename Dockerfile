@@ -27,4 +27,4 @@ EXPOSE 8080
 RUN echo "import http.server; http.server.test(HandlerClass=http.server.SimpleHTTPRequestHandler, port=8080)" > /tmp/fake_http.py
 
 # Inicia MySQL y el servidor HTTP falso
-CMD sh -c "service mysql start && python3 /tmp/fake_http.py"
+CMD sh -c "mysqld & python3 /tmp/fake_http.py"
