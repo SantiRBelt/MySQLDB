@@ -14,8 +14,13 @@ EXPOSE 3306
 # Expone un puerto HTTP falso (8080)
 EXPOSE 8080
 
-# Instala un servidor HTTP falso para engañar a Render
-RUN apt-get update && apt-get install -y python3
+# Instala apt-get y Python para crear un servidor HTTP falso
+RUN apt-get update || true && \
+    apt-get install -y --no-install-recommends apt-utils && \
+    apt-get install -y python3 && \
+    rm -rf /var/lib/apt/lists/*
+
+# Crea un servidor HTTP falso en Python
 RUN echo "import http.server; http.server.test(HandlerClass=http.server.SimpleHTTPRequestHandler, port=8080)" > /tmp/fake_http.py
 
 # Inicia MySQL y el servidor HTTP falso
