@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+      MYSQL_DATABASE: universitybdd
+    ports:
+      - "3306:3306"
+    networks:
+      - my-network
+
+  entregable-universities:
+    image: entregable-universities  # Asegúrate de que esta imagen esté construida
+    build:
+      context: .
+    ports:
+      - "60:60"  # Ajusta el puerto según sea necesario
+    environment:
+      - CONNECTIONSTRING=Server=mysql_container;Database=universitybdd;User=root;Password=
+    networks:
+      - my-network
+    depends_on:
+      - mysql  # Asegura que MySQL se inicie antes que la aplicación
+
+networks:
+  my-network:
+    driver: bridge

@@ -1,5 +1,12 @@
-# You can change this to a newer version of MySQL available at
-# https://hub.docker.com/r/mysql/mysql-server/tags/
-FROM mysql/mysql-server:8.0.24
+# Usa la imagen oficial de MySQL
+FROM mysql:8.0
 
-COPY config/user.cnf /etc/mysql/my.cnf
+# Configura las variables de entorno
+ENV MYSQL_ALLOW_EMPTY_PASSWORD=true
+ENV MYSQL_DATABASE=universitybdd
+
+# Copia el archivo .sql al contenedor para que MySQL lo ejecute al iniciar
+COPY backups/*.sql /docker-entrypoint-initdb.d/
+
+# Expone el puerto de MySQL
+EXPOSE 3306
