@@ -24,7 +24,8 @@ EXPOSE 3306
 EXPOSE 8080
 
 # Crea un servidor HTTP falso en Python
-RUN echo "import http.server; http.server.test(HandlerClass=http.server.SimpleHTTPRequestHandler, port=8080)" > /tmp/fake_http.py
+RUN echo "import http.server; http.server.test(HandlerClass=http.server.SimpleHTTPRequestHandler, port=8080)" > /tmp/fake_http.py && \
+    chmod +x /tmp/fake_http.py
 
 # Inicia MySQL y el servidor HTTP falso
 CMD sh -c "mysqld & python3 /tmp/fake_http.py"
