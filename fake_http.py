@@ -1,42 +1,17 @@
-import http.server
-import mysql.connector
-import json
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
-class MySQLRequestHandler(http.server.BaseHTTPRequestHandler):
+class SimpleHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        # Configura la conexión a MySQL
-        db = mysql.connector.connect(
-            host="localhost",
-            user="root",  # Usuario por defecto de MySQL
-            password="",  # Contraseña vacía según tu configuración
-            database="universitybdd"  # Nombre de la base de datos
-        )
-        cursor = db.cursor()
-
-        # Realiza una consulta a la base de datos
-        cursor.execute("SELECT * FROM your_table_name")  # Cambia "your_table_name" por el nombre de tu tabla
-        result = cursor.fetchall()
-
-        # Cierra la conexión a la base de datos
-        cursor.close()
-        db.close()
-
-        # Convierte el resultado a JSON
-        response = json.dumps(result)
-
-        # Envía la respuesta HTTP
         self.send_response(200)
-        self.send_header('Content-type', 'application/json')
+        self.send_header("Content-type", "text/plain")
         self.end_headers()
-        self.wfile.write(response.encode('utf-8'))
+        self.wfile.write(b"OK")
 
-    def do_POST(self):
-        # Aquí puedes manejar solicitudes POST si es necesario
-        self.send_response(501)  # 501 Not Implemented
-        self.end_headers()
+def run(server_class=HTTPServer, handler_class=SimpleHandler, port=8080):
+    server_address = ('', port)
+    httpd = server_class(server_address, handler_class)
+    print(f"Starting fake HTTP server on port {port}...")
+    httpd.serve_forever()
 
 if __name__ == "__main__":
-    server_address = ('', 8080)  # Escucha en el puerto 8080
-    httpd = http.server.HTTPServer(server_address, MySQLRequestHandler)
-    print("Servidor HTTP falso iniciado en el puerto 8080...")
-    httpd.serve_forever()
+    run()
