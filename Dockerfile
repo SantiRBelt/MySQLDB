@@ -6,9 +6,13 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         apt-utils \
         python3 \
+        python3-pip \
         default-mysql-server \
         default-mysql-client && \
     rm -rf /var/lib/apt/lists/*
+
+# Instala mysql-connector-python
+RUN pip3 install mysql-connector-python
 
 # Configura las variables de entorno para MySQL
 ENV MYSQL_ALLOW_EMPTY_PASSWORD=true
